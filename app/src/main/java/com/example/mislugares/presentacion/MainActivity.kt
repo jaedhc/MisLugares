@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.example.mislugares.Aplicacion
 import com.example.mislugares.casos_uso.CasosUsoActividades
 import com.example.mislugares.casos_uso.CasosUsoLugar
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         val i = Intent(this, MainActivity2::class.java)
         //startActivity(i)
 

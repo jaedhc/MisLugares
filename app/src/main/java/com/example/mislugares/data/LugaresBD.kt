@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.preference.PreferenceManager
 import android.database.SQLException
+import android.widget.Toast
 import com.example.mislugares.Aplicacion
 import com.example.mislugares.data.RepositorioLugares
 import com.example.mislugares.dominio.GeoPunto
@@ -111,6 +112,7 @@ open class LugaresBD(val contexto: Context) :
     }
 
     override fun borrar(id: Int) {
+        val cursor = readableDatabase.rawQuery("SELECT * FROM lugares WHERE _id = $id", null)
         writableDatabase.execSQL("DELETE FROM lugares WHERE _id = $id")
     }
 

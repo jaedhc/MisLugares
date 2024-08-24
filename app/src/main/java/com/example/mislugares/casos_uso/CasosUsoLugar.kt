@@ -1,5 +1,6 @@
 package com.example.mislugares.casos_uso
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -30,10 +31,12 @@ class CasosUsoLugar (val actividad: Activity,
         actividad.startActivity(i)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun guardar(id: Int, nuevoLugar: Lugar){
         val i = Intent(actividad, VistaLugarActivity::class.java)
         lugares.actualizada(id, nuevoLugar)
-        actividad.startActivityForResult(i, 1234)
+        adaptador.cursor = lugares.extraeCursor()
+        adaptador.notifyDataSetChanged()
         actividad.finish()
     }
 
@@ -53,6 +56,8 @@ class CasosUsoLugar (val actividad: Activity,
 
     fun borrar(pos:Int){
         lugares.borrar(pos)
+        adaptador.cursor = lugares.extraeCursor()
+        adaptador.notifyDataSetChanged()
         actividad.finish()
     }
 
