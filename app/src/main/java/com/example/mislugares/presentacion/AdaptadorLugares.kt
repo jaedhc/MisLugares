@@ -1,6 +1,6 @@
-package com.example.mislugares.data
+package com.example.mislugares.presentacion
 
-import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,19 +9,24 @@ import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mislugares.Aplicacion
 import com.example.mislugares.R
+import com.example.mislugares.data.RepositorioLugares
+import com.example.mislugares.dominio.GeoPunto
 import com.example.mislugares.dominio.Lugar
 import com.example.mislugares.dominio.TipoLugar
 
-class AdaptadorLugares(val lugares: RepositorioLugares):
+open class AdaptadorLugares(val lugares: RepositorioLugares):
     RecyclerView.Adapter<AdaptadorLugares.ViewHolder>() {
 
     class ViewHolder(val view: View): RecyclerView.ViewHolder(view){
+
         fun personaliza(lugar:Lugar) = with(itemView){
             val nombre:TextView = itemView.findViewById(R.id.nombre)
             val direccion:TextView = itemView.findViewById(R.id.direccion)
             val foto:ImageView = itemView.findViewById(R.id.foto)
             val valoracion:RatingBar = itemView.findViewById(R.id.valoracion)
+            val distancia:TextView = itemView.findViewById(R.id.distancia)
 
             nombre.text = lugar.nombre
             direccion.text = lugar.direccion
@@ -45,6 +50,15 @@ class AdaptadorLugares(val lugares: RepositorioLugares):
             foto.scaleType = ImageView.ScaleType.FIT_END
             valoracion.rating= lugar.valoracion
 
+            val posicion = (context.applicationContext as Aplicacion).posicionActual
+            if (posicion== GeoPunto.SIN_POSICION || lugar.posicion== GeoPunto.SIN_POSICION) {
+                distancia.text = "... Km"
+            } else {
+                val d = posicion.distancia(lugar.posicion).toInt()
+                distancia.text = if (d < 2000) "$d m"
+                else          "${(d / 1000)} Km"
+
+            }
         }
     }
 
@@ -62,6 +76,9 @@ class AdaptadorLugares(val lugares: RepositorioLugares):
 
         holder.itemView.setOnClickListener {
             Toast.makeText(holder.itemView.context, "$position", Toast.LENGTH_LONG).show()
+            val i = Intent(holder.itemView.context, VistaLugarActivity::class.java)
+            i.putExtra("pos", position)
+            holder.itemView.context.startActivity(i)
         }
     }
 

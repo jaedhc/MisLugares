@@ -28,7 +28,7 @@ class LugaresLista : RepositorioLugares {
             Lugar(
                 "Al de siempre",
                 "P. Industrial Junto Moli Nou - 466772",
-                GeoPunto(-0.166093, 38.995656),
+                GeoPunto(-0.295058, 38.867180),
                 TipoLugar.EDUCACION,
                 "foto2",
                 962849300, "https://androidcurso.com",
@@ -40,7 +40,7 @@ class LugaresLista : RepositorioLugares {
             Lugar(
                 "Barranco del infierno",
                 "Vía verde del rio serpis. Villalonga (Valencia)",
-                GeoPunto(-0.166093, 38.995656),
+                GeoPunto(-0.1720092, 38.9705949),
                 TipoLugar.NATURALEZA,
                 "foto2",
                 962849300, "https://sosegaos.blogspot.com.es",
@@ -52,7 +52,7 @@ class LugaresLista : RepositorioLugares {
             Lugar(
                 "La Vital",
                 "Avda. de La Vital, 0 46701 Gandía (Valencia)",
-                GeoPunto(-0.166093, 38.995656),
+                GeoPunto(-0.190642, 38.925857),
                 TipoLugar.COMPRAS,
                 "foto5",
                 962849300, "https://sosegaos.blogspot.com.es",

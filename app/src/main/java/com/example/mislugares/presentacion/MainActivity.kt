@@ -16,7 +16,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     val lugares by lazy {(application as Aplicacion).lugares}
-    val usoLugar by lazy { CasosUsoLugar(this, lugares) }
+    val adaptador by lazy { (application as Aplicacion).adaptador }
+    val usoLugar by lazy { CasosUsoLugar(this, lugares, adaptador) }
     val usoActividad by lazy { CasosUsoActividades(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +31,10 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.button01.setOnClickListener {
+            usoActividad.lanzarLista()
+        }
+
+        binding.buttonBuscar.setOnClickListener{
             lanzarVistaLugar()
         }
 

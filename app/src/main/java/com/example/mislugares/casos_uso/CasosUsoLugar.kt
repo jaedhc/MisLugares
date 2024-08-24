@@ -9,19 +9,20 @@ import android.provider.MediaStore
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.FileProvider
-import androidx.recyclerview.widget.RecyclerView.Adapter
-import com.example.mislugares.data.AdaptadorLugares
+import com.example.mislugares.Aplicacion
 import com.example.mislugares.data.RepositorioLugares
+import com.example.mislugares.datos.LugaresBD
 import com.example.mislugares.dominio.GeoPunto
 import com.example.mislugares.dominio.Lugar
+import com.example.mislugares.presentacion.AdaptadorLugaresBD
 import com.example.mislugares.presentacion.EdicionLugarActivity
 import com.example.mislugares.presentacion.VistaLugarActivity
 import java.io.File
-import java.io.IOError
 import java.io.IOException
 
 class CasosUsoLugar (val actividad: Activity,
-    val lugares: RepositorioLugares,){
+    val lugares: LugaresBD, open val adaptador: AdaptadorLugaresBD
+){
 
     fun mostrar(pos:Int){
         val i = Intent(actividad, VistaLugarActivity::class.java)
@@ -34,6 +35,20 @@ class CasosUsoLugar (val actividad: Activity,
         lugares.actualizada(id, nuevoLugar)
         actividad.startActivityForResult(i, 1234)
         actividad.finish()
+    }
+
+    fun nuevo() {
+        val _id = lugares.nuevo()
+        //ponemos la posición actual en el nuevo lugar
+        val posicion = (actividad.application as Aplicacion).posicionActual
+        if (posicion != GeoPunto.SIN_POSICION) {
+            val lugar = lugares.elemento(_id)
+            lugar.posicion = posicion
+            lugares.actualizada(_id, lugar)
+        }
+        val i = Intent(actividad, EdicionLugarActivity::class.java)
+        i.putExtra("_id", _id)
+        actividad.startActivity(i)
     }
 
     fun borrar(pos:Int){
@@ -85,9 +100,18 @@ class CasosUsoLugar (val actividad: Activity,
     }
 
     fun ponerFoto(pos: Int, uri:String?, imageView: ImageView){
-        val lugar = lugares.elemento(pos)
+        val lugar = adaptador.lugarPosicion(pos)
         lugar.foto = uri ?: ""
         visualizarFoto(lugar, uri, imageView)
+        actualizaPosLugar(pos, lugar)
+    }
+
+    fun actualizaPosLugar(pos: Int, lugar: Lugar) {
+        val id = adaptador.idPosicion(pos)
+        guardar(id, lugar)
+        //lugares.actualiza(id, lugar);
+        //adaptador.cursor = lugares.extraeCursor()
+        //adaptador.notifyDataSetChanged()
     }
 
     fun visualizarFoto(lugar: Lugar, uri:String?, imageView: ImageView){

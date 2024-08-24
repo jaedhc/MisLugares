@@ -18,6 +18,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AlertDialog.Builder
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import com.example.mislugares.Aplicacion
 import com.example.mislugares.R
@@ -31,7 +32,8 @@ class VistaLugarActivity : AppCompatActivity() {
 
     // Variables
     private val lugares by lazy { (application as Aplicacion).lugares }
-    private val usoLugar by lazy { CasosUsoLugar(this, lugares) }
+    val adaptador by lazy { (application as Aplicacion).adaptador }
+    private val usoLugar by lazy { CasosUsoLugar(this, lugares, adaptador) }
     private val usoEditar by lazy { CasoUsoEditar(this, lugares) }
     private var pos = 1
     val RESULTADO_EDITAR = 1234
@@ -46,7 +48,7 @@ class VistaLugarActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.vista_lugar)
-
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         // Obtiene la posición del lugar
         pos = intent.extras?.getInt("pos", 0) ?: 0
 
@@ -56,7 +58,7 @@ class VistaLugarActivity : AppCompatActivity() {
         val btnUrl = this.findViewById<LinearLayout>(R.id.ll_url)
 
         // Obtiene el lugar
-        lugar = lugares.elemento(pos)
+        lugar = adaptador.lugarPosicion(pos)
 
         btnDire.setOnClickListener{
             verMapa()
@@ -150,6 +152,13 @@ class VistaLugarActivity : AppCompatActivity() {
         valoracion.rating = lugar.valoracion
         valoracion.setOnRatingBarChangeListener{
             ratingBar, valor, fromUser -> lugar.valoracion = valor
+        }
+        valoracion.setOnRatingBarChangeListener{ _, valor, _ ->
+            val _id = adaptador.idPosicion(pos)
+            lugar.valoracion = valor
+            lugares.actualizada(id = _id, lugar = lugar)
+            adaptador.cursor = lugares.extraeCursor()
+            adaptador.notifyDataSetChanged()
         }
 
     }

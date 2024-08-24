@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Spinner
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import com.example.mislugares.Aplicacion
 import com.example.mislugares.R
@@ -17,18 +18,21 @@ import com.example.mislugares.dominio.TipoLugar
 class EdicionLugarActivity : AppCompatActivity() {
 
     private val lugares by lazy { (application as Aplicacion).lugares }
-    private val usoLugar by lazy { CasosUsoLugar(this, lugares) }
+    val adaptador by lazy { (application as Aplicacion).adaptador }
+    private val usoLugar by lazy { CasosUsoLugar(this, lugares, adaptador) }
     private var pos = 1
     private lateinit var lugar: Lugar
+    var _id = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.edicion_lugar)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-        pos = intent.extras?.getInt("pos", 0) ?: 0
-
-        // Obtiene el lugar
-        lugar = lugares.elemento(pos)
+        pos = intent.extras?.getInt("pos", -1) ?: 0
+        _id = intent.extras?.getInt("_id", -1) ?: 0
+        lugar = if (_id != -1) lugares.elemento(_id)
+        else           adaptador.lugarPosicion(pos)
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -55,6 +59,7 @@ class EdicionLugarActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = adaptador.posicionId(pos)
         when (item.itemId) {
             R.id.accion_guardar -> {
                 val nombre = findViewById<EditText>(R.id.txtNombre)
@@ -73,7 +78,9 @@ class EdicionLugarActivity : AppCompatActivity() {
                     url.text.toString(),
                     comentarios.text.toString(),
                     lugar.fecha, lugar.valoracion)
-                usoLugar.guardar(pos, nuevoLugar)
+                if (_id==-1) _id = adaptador.idPosicion(pos)
+                usoLugar.guardar(_id, nuevoLugar)
+                finish()
                 return true
             }
             R.id.accion_cancelar -> {

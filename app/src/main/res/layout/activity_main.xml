@@ -17,22 +17,31 @@
 
         <Button
             android:id="@+id/button01"
-            android:layout_height="wrap_content"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:text="@string/accion_mostrar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/button_buscar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/accion_buscar"
+            app:layout_constraintEnd_toEndOf="@+id/button01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button01" />
 
         <Button
             android:id="@+id/button02"
-            android:layout_height="wrap_content"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:text="@string/accion_preferencias"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button01">
-        </Button>
+            app:layout_constraintTop_toBottomOf="@+id/button_buscar"/>
 
         <Button
             android:id="@+id/button03"
