@@ -57,8 +57,7 @@ class MapaActivity: FragmentActivity(), OnMapReadyCallback, GoogleMap.OnInfoWind
             val lugar = adaptador.lugarPosicion(n)
             val p = lugar.posicion
             if (/*p != null &&*/ p.latitud != 0.0) {
-                val iGrande = BitmapFactory.decodeResource(
-                    getResources(), lugar.tipoLugar.recurso)
+                val iGrande = BitmapFactory.decodeResource(resources, lugar.tipoLugar.recurso)
 
                 val icono = Bitmap.createScaledBitmap(iGrande,
                     iGrande.getWidth() / 7, iGrande.getHeight() / 7, false

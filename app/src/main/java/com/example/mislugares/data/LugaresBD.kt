@@ -36,42 +36,78 @@ open class LugaresBD(val contexto: Context) :
         )
         bd.execSQL(
             ("INSERT INTO lugares VALUES (null, " +
-                    "'Escuela Politécnica Superior de Gandía', " +
-                    "'C/ Paranimf, 1 46730 Gandia (SPAIN)', -0.166093, 38.995656, " +
+                    "'Facultad de Ingeniería Mecánica y Eléctrica', " +
+                    "'Pedro de Alba SN, Niños Héroes, Ciudad Universitaria, 66455 San Nicolás de los Garza, N.L.', -100.3135, 25.7252, " +
                     TipoLugar.EDUCACION.ordinal + ", '', 962849300, " +
-                    "'http://www.epsg.upv.es', " +
-                    "'Uno de los mejores lugares para formarse.', " +
+                    "'http://www.fime.uanl.mx/', " +
+                    "'Vive la FIME.', " +
                     System.currentTimeMillis() + ", 3.0)")
         )
         bd.execSQL(
-            ("INSERT INTO lugares VALUES (null, 'Al de siempre', " +
-                    "'P.Industrial Junto Molí Nou - 46722, Benifla (Valencia)', " +
-                    " -0.190642, 38.925857, " + TipoLugar.BAR.ordinal + ", '', " +
-                    "636472405, '', " + "'No te pierdas el arroz en calabaza.', " +
-                    System.currentTimeMillis() + ", 3.0)")
-        )
-        bd.execSQL(
-            ("INSERT INTO lugares VALUES (null, 'androidcurso.com', " +
-                    "'ciberespacio', 0.0, 0.0," + TipoLugar.EDUCACION.ordinal + ", '', " +
-                    "962849300, 'http://androidcurso.com', " +
-                    "'Amplia tus conocimientos sobre Android.', " +
-                    System.currentTimeMillis() + ", 5.0)")
-        )
-        bd.execSQL(
-            ("INSERT INTO lugares VALUES (null,'Barranco del Infierno'," +
-                    "'Vía Verde del río Serpis. Villalonga (Valencia)', -0.295058, " +
-                    "38.867180, " + TipoLugar.NATURALEZA.ordinal + ", '', 0, " +
-                    "'http://sosegaos.blogspot.com.es/2009/02/lorcha-villalonga-via-verde-del-" +
-                    "rio.html', 'Espectacular ruta para bici o andar', " +
+            ("INSERT INTO lugares VALUES (null, 'Alameda Monterrey', " +
+                    "'Centro, 64000 Monterrey, N.L.', " +
+                    " -100.32122196240864, 25.676197257990697, " + TipoLugar.NATURALEZA.ordinal + ", '', " +
+                    "636472405, '', " + "'Parque central animado con senderos arbolados, jardines, loros, vendedores de comida y una glorieta..', " +
                     System.currentTimeMillis() + ", 4.0)")
         )
         bd.execSQL(
-            ("INSERT INTO lugares VALUES (null, 'La Vital', " +
-                    "'Avda. La Vital,0 46701 Gandia (Valencia)',-0.1720092,38.9705949," +
-                    TipoLugar.COMPRAS.ordinal + ", '', 962881070, " +
-                    "'http://www.lavital.es', 'El típico centro comercial', " +
+            ("INSERT INTO lugares VALUES (null, 'Macroplaza', " +
+                    "'Centro, 64000 Monterrey, N.L.', -100.30934694394188,25.669368868283385," + TipoLugar.COMPRAS.ordinal + ", '', " +
+                    "962849300, '', " +
+                    "'Gran plaza con monumentos, fuentes y jardines, rodeada de museos y otros edificios." +
+                    " .', " +
+                    System.currentTimeMillis() + ", 5.0)")
+        )
+        bd.execSQL(
+            ("INSERT INTO lugares VALUES (null, 'Cascadas del cerro de la silla', " +
+                    "'Cerro de la Silla, Cascadas, del, Guadalupe, N.L.', " +
+                    " -100.21034469213464,25.630261665919118, " + TipoLugar.NATURALEZA.ordinal + ", '', " +
+                    "636472405, '', " + "'Naturaleza.', " +
+                    System.currentTimeMillis() + ", 3.0)")
+        )
+        bd.execSQL(
+            ("INSERT INTO lugares VALUES (null, 'Estadio Universitario', " +
+                    "'Niños Héroes, Ciudad Universitaria, 66451 San Nicolás de los Garza, N.L.',-100.31074603958722, 25.72283366853118," +
+                    TipoLugar.DEPORTE.ordinal + ", '', +528181586450, " +
+                    "'', 'Estadio d3e los Tigres UANL', " +
+                    System.currentTimeMillis() + ", 4.0)")
+        )
+        bd.execSQL(
+            ("INSERT INTO lugares VALUES (null, 'Casa de Jairo', " +
+                    "'C. Ramón de Campoamor 990', " +
+                    " -100.31467, 25.731404, " + TipoLugar.BAR.ordinal + ", '', " +
+                    "636472405, '', " + "'Casa de Jairo.', " +
                     System.currentTimeMillis() + ", 2.0)")
         )
+        bd.execSQL(
+            ("INSERT INTO lugares VALUES (null, 'Cerro de la Silla\n', " +
+                    "'JQM8+24 Cerro de La Silla, Nuevo León', " +
+                    " -100.23457212225664, 25.63397064306529, " + TipoLugar.NATURALEZA.ordinal + ", '', " +
+                    "636472405, '', " + "'Esta montaña con forma de silla de montar tiene senderos empinados y vistas panorámicas desde la cima.', " +
+                    System.currentTimeMillis() + ", 3.0)")
+        )
+        bd.execSQL(
+            ("INSERT INTO lugares VALUES (null, 'Paseo Santa Lucía\n', " +
+                    "'JQM8+24 Cerro de La Silla, Nuevo León', " +
+                    " -100.28748203827637, 25.67569060881958, " + TipoLugar.ESPECTACULO.ordinal + ", '', " +
+                    "636472405, '', " + "'Canal con senderos, murales al aire libre y viajes en bote al Museo de Historia Mexicana.', " +
+                    System.currentTimeMillis() + ", 3.0)")
+        )
+        bd.execSQL(
+            ("INSERT INTO lugares VALUES (null, 'Galerías Monterrey\n', " +
+                    "'Av Insurgentes 2500, Vista Hermosa, 64620 Monterrey, N.L.', " +
+                    " -100.35210218494791, 25.682096315735926, " + TipoLugar.COMPRAS.ordinal + ", '', " +
+                    "8183484989, 'galerias.com', " + "'Centro comercial Galerías Mty', " +
+                    System.currentTimeMillis() + ", 4.5)")
+        )
+        bd.execSQL(
+            ("INSERT INTO lugares VALUES (null, 'Fashion Drive\n', " +
+                    "'Av Insurgentes 2500, Vista Hermosa, 64620 Monterrey, N.L.', " +
+                    " -100.33518135683066, 25.65333872784872, " + TipoLugar.COMPRAS.ordinal + ", '', " +
+                    "8111613300, 'http://fashiondrive.mx/', " + "'Centro comercial de varios niveles con cadenas minoristas, boutiques modernas, restaurantes y un multicine.', " +
+                    System.currentTimeMillis() + ", 4.0)")
+        )
+
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -145,5 +181,22 @@ open class LugaresBD(val contexto: Context) :
         valoracion = cursor.getFloat(11)
     )
 
-    fun extraeCursor(): Cursor = readableDatabase.rawQuery("SELECT * FROM lugares", null)
+    fun extraeCursor(): Cursor {
+        val pref = PreferenceManager.getDefaultSharedPreferences(contexto)
+        var consulta = when (pref.getString("orden", "0")) {
+            "0" -> "SELECT * FROM lugares "
+            "1" -> "SELECT * FROM lugares ORDER BY valoracion DESC"
+            else -> {
+                val lon = (contexto.getApplicationContext() as Aplicacion).posicionActual.longitud
+                val lat = (contexto.getApplicationContext() as Aplicacion).posicionActual.latitud
+                "SELECT * FROM lugares ORDER BY " +
+                        "(${lon} - longitud)*(${lon} - longitud) + " +
+                        "(${lat} - latitud )*(${lat} - latitud )"
+            }
+        }
+        consulta += " LIMIT ${pref.getString("maximo", "12")}"
+        return readableDatabase.rawQuery(consulta, null)
+    }
+
+
 }

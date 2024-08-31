@@ -1,14 +1,18 @@
 package com.example.mislugares.casos_uso
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.example.mislugares.Aplicacion
 import com.example.mislugares.data.RepositorioLugares
@@ -95,13 +99,7 @@ class CasosUsoLugar (val actividad: Activity,
     }
 
     fun ponerDeGaleria(codigoSolicitud: Int){
-        val action = Intent.ACTION_OPEN_DOCUMENT
 
-        val i = Intent(action, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = "image/"
-        }
-        actividad.startActivityForResult(i, codigoSolicitud)
     }
 
     fun ponerFoto(pos: Int, uri:String?, imageView: ImageView){

@@ -4,12 +4,6 @@
         android:key="notificaciones"
         android:title="Mandar notificaciones" />
 
-    <EditTextPreference
-        android:key="distancia"
-        android:title="Distancia máxima"
-        android:summary="Notificar si estamos cerca de un lugar"
-        android:inputType="number" />
-
     <ListPreference
         android:key="orden"
         android:title="Criterio de ordenación"

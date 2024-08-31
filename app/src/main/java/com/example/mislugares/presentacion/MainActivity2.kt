@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -20,12 +21,16 @@ import com.example.mislugares.R
 import com.example.mislugares.casos_uso.CasosUsoActividades
 import com.example.mislugares.casos_uso.CasosUsoLocalizacion
 import com.example.mislugares.casos_uso.CasosUsoLugar
+import com.example.mislugares.databinding.ActivityMain2Binding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 class MainActivity2 : AppCompatActivity() {
 
     val SOLICITUD_PERMISO_LOCALIZACION = 1
+    val RESULTADO_PREFERENCIAS = 0
+
+    private lateinit var binding: ActivityMain2Binding
 
     val lugares by lazy {(application as Aplicacion).lugares}
     val adaptador by lazy { (application as Aplicacion).adaptador }
@@ -34,7 +39,8 @@ class MainActivity2 : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main2)
+        binding = ActivityMain2Binding.inflate(layoutInflater)
+        setContentView(binding.root)
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
@@ -69,7 +75,24 @@ class MainActivity2 : AppCompatActivity() {
             usoLugar.nuevo()
         }
 
+        binding.btnSettings.setOnClickListener{
+            lanzarPreferencias(binding.root)
+        }
 
+
+    }
+
+    fun lanzarPreferencias(view: View? = null) = startActivityForResult(
+        Intent(this, PreferenciasActivity::class.java), RESULTADO_PREFERENCIAS
+    )
+
+    override
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RESULTADO_PREFERENCIAS) {
+            adaptador.cursor = lugares.extraeCursor()
+            adaptador.notifyDataSetChanged()
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,
@@ -84,5 +107,4 @@ class MainActivity2 : AppCompatActivity() {
             }
         }
     }
-
 }

@@ -1,12 +1,19 @@
 package com.example.mislugares.presentacion
 
+import android.Manifest
 import android.app.Activity
 import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
+import android.media.Image
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -20,13 +27,21 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AlertDialog.Builder
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import com.example.mislugares.Aplicacion
 import com.example.mislugares.R
 import com.example.mislugares.casos_uso.CasoUsoEditar
 import com.example.mislugares.casos_uso.CasosUsoLugar
+import com.example.mislugares.databinding.ActivityMain2Binding
 import com.example.mislugares.dominio.Lugar
+import java.io.File
+import java.io.IOException
 import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 class VistaLugarActivity : AppCompatActivity() {
 
@@ -43,6 +58,7 @@ class VistaLugarActivity : AppCompatActivity() {
     private var uriUltimaFoto: Uri? = null
 
     lateinit var foto : ImageView
+    private lateinit var photoFile: File
 
     // onCreate
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,6 +95,7 @@ class VistaLugarActivity : AppCompatActivity() {
         val camara = this.findViewById<ImageView>(R.id.camara)
         foto = this.findViewById(R.id.foto)
         val eliminar = this.findViewById<ImageView>(R.id.eliminar)
+
         galeria.setOnClickListener{
             ponerDeGaleria()
         }
@@ -98,7 +115,25 @@ class VistaLugarActivity : AppCompatActivity() {
 
     // Función para actualizar las vistas
     fun tomarFoto() {
-        uriUltimaFoto = usoLugar.toamrFoto(RESULTADO_FOTO)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+            != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                REQUEST_CODE_PERMISSION)
+        } else {
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            photoFile = createImageFile()
+            val photoURI: Uri = FileProvider.getUriForFile(
+                this,
+                "es.upv.jtomas.mislugares.fileProvider",
+                photoFile
+            )
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+            startActivityForResult(intent, REQUEST_CODE_CAMERA)
+        }
     }
 
     fun eliminarFoto(){
@@ -119,7 +154,11 @@ class VistaLugarActivity : AppCompatActivity() {
 
     }
 
-    fun ponerDeGaleria() = usoLugar.ponerDeGaleria(RESULTADO_GALERIA)
+    fun ponerDeGaleria() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, REQUEST_CODE_GALLERY)
+    }
 
     fun verMapa() = usoLugar.verMapa(lugar)
     fun llamarTelefono() = usoLugar.llamarTelefono(lugar)
@@ -203,23 +242,41 @@ class VistaLugarActivity : AppCompatActivity() {
         }
     }
 
+    private fun createImageFile(): File {
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
+        val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+            "JPEG_${timeStamp}_",
+            ".jpg",
+            storageDir
+        )
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if( requestCode == RESULTADO_EDITAR){
             actualizaVistas()
-        } else if( requestCode == RESULTADO_GALERIA) {
-            if(requestCode == RESULT_OK){
-                usoLugar.ponerFoto(pos, data?.dataString ?: "", foto)
-            } else {
-                Toast.makeText(this, "Foto no cargada", Toast.LENGTH_LONG).show()
+        } else if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_GALLERY){
+            try{
+                val foto: ImageView? = findViewById<ImageView>(R.id.foto)
+                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, data!!.data)
+                foto!!.setImageBitmap(bitmap)
+                val lugar = adaptador.lugarPosicion(pos)
+                lugar.foto = data.dataString!!
+            } catch (e: IOException){
+                Log.d("Err", e.printStackTrace().toString())
             }
-        } else if(requestCode == RESULTADO_FOTO){
-            if(requestCode == Activity.RESULT_OK && uriUltimaFoto!=null){
-                lugar.foto = uriUltimaFoto.toString()
-                usoLugar.ponerFoto(pos, lugar.foto, foto)
-            } else {
-                Toast.makeText(this, "Error en captura", Toast.LENGTH_LONG).show()
-            }
+        } else if(resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_CAMERA){
+            val foto: ImageView? = findViewById<ImageView>(R.id.foto)
+            val bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
+            foto!!.setImageBitmap(bitmap)
         }
+
+    }
+
+    companion object {
+        const val REQUEST_CODE_PERMISSION = 101
+        const val REQUEST_CODE_GALLERY = 100
+        const val REQUEST_CODE_CAMERA = 102
     }
 }
